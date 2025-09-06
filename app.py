@@ -7,14 +7,25 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     data = None
+    error_message = None  # ADDED: Variable to store error messages
     
     if request.method == 'POST':
         city = request.form['cityN']
         state = request.form['stateN']
         country = request.form['countryN']
-        data = get_weather(city, state, country)
+        
+        # ADDED: Try-except block to catch errors
+        try:
+            data = get_weather(city, state, country)
+        except Exception as e:
+            # ADDED: Convert technical errors to user-friendly messages
+            if "Location not found" in str(e):
+                error_message = f"Location '{city}' not found. Please check spelling and try again."
+            else:
+                error_message = "Error getting weather data. Please try again."
     
-    return render_template('index.html', data=data)
+    # MODIFIED: Pass error_message to template
+    return render_template('index.html', data=data, error_message=error_message)
 
 if __name__ == '__main__':
     # Get port from environment variable or default to 5000
