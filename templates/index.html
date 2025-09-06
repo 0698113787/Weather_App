@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🌤️ Weather App</h1>
+        
+        <form id="weatherForm" method="POST" action="{{ url_for('index') }}">
+            <div class="form-row">
+                <div class="form-group flex-1">
+                    <label for="location">City Name *</label>
+                    <input type="text" id="location" name="cityN" placeholder="Enter city name" required 
+                           value="{{ request.form.cityN if request.form else '' }}">
+                </div>
+                <div class="form-group flex-1">
+                    <label for="state">State (Optional)</label>
+                    <input type="text" id="state" name="stateN" placeholder="Enter state" 
+                           value="{{ request.form.stateN if request.form else '' }}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="country">Country *</label>
+                <select id="country" name="countryN" required>
+                    <option value="">Select a country</option>
+                    <option value="US" {{ 'selected' if request.form and request.form.countryN == 'US' else '' }}>United States</option>
+                    <option value="GB" {{ 'selected' if request.form and request.form.countryN == 'GB' else '' }}>United Kingdom</option>
+                    <option value="CA" {{ 'selected' if request.form and request.form.countryN == 'CA' else '' }}>Canada</option>
+                    <option value="AU" {{ 'selected' if request.form and request.form.countryN == 'AU' else '' }}>Australia</option>
+                    <option value="DE" {{ 'selected' if request.form and request.form.countryN == 'DE' else '' }}>Germany</option>
+                    <option value="FR" {{ 'selected' if request.form and request.form.countryN == 'FR' else '' }}>France</option>
+                    <option value="IT" {{ 'selected' if request.form and request.form.countryN == 'IT' else '' }}>Italy</option>
+                    <option value="ES" {{ 'selected' if request.form and request.form.countryN == 'ES' else '' }}>Spain</option>
+                    <option value="JP" {{ 'selected' if request.form and request.form.countryN == 'JP' else '' }}>Japan</option>
+                    <option value="CN" {{ 'selected' if request.form and request.form.countryN == 'CN' else '' }}>China</option>
+                    <option value="IN" {{ 'selected' if request.form and request.form.countryN == 'IN' else '' }}>India</option>
+                    <option value="BR" {{ 'selected' if request.form and request.form.countryN == 'BR' else '' }}>Brazil</option>
+                    <option value="ZA" {{ 'selected' if request.form and request.form.countryN == 'ZA' else '' }}>South Africa</option>
+                    <option value="NG" {{ 'selected' if request.form and request.form.countryN == 'NG' else '' }}>Nigeria</option>
+                    <option value="EG" {{ 'selected' if request.form and request.form.countryN == 'EG' else '' }}>Egypt</option>
+                    <option value="MX" {{ 'selected' if request.form and request.form.countryN == 'MX' else '' }}>Mexico</option>
+                    <option value="AR" {{ 'selected' if request.form and request.form.countryN == 'AR' else '' }}>Argentina</option>
+                    <option value="RU" {{ 'selected' if request.form and request.form.countryN == 'RU' else '' }}>Russia</option>
+                    <option value="KR" {{ 'selected' if request.form and request.form.countryN == 'KR' else '' }}>South Korea</option>
+                    <option value="TH" {{ 'selected' if request.form and request.form.countryN == 'TH' else '' }}>Thailand</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="search-btn">Get Weather</button>
+        </form>
+
+        {% if error %}
+        <div class="error-message" style="display: block;">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if data %}
+        <div class="weather-result" style="display: block;">
+            <div class="weather-header">
+                <div class="location-name">{{ request.form.cityN }}{% if request.form.stateN %}, {{ request.form.stateN }}{% endif %}{% if request.form.countryN %}, {{ request.form.countryN }}{% endif %}</div>
+            </div>
+            
+            <div class="weather-main">
+                <img class="weather-icon" 
+                     src="https://openweathermap.org/img/wn/{{ data.icon }}@2x.png" 
+                     alt="{{ data.description }}">
+                <div class="temperature">{{ data.temperature|round|int }}°C</div>
+            </div>
+            
+            <div class="weather-desc">{{ data.description|title }}</div>
+            
+            <div class="weather-details">
+                <div class="detail-item">
+                    <div class="detail-label">Main</div>
+                    <div class="detail-value">{{ data.main }}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Temperature</div>
+                    <div class="detail-value">{{ data.temperature|round(1) }}°C</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Description</div>
+                    <div class="detail-value">{{ data.description|title }}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Weather Icon</div>
+                    <div class="detail-value">{{ data.icon }}</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
