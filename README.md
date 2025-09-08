@@ -1,4 +1,6 @@
 Project Overview
+
+
 *Description : A weather application built using python, HTML, CSS, Flask, Jinja templates and weather API to provide real-time weather information.
 *Features    : Allow users to input their city name, state name / Province(optional) and Country name(DDL) to retrieve current weather data.
 
